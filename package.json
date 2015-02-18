@@ -1,0 +1,18 @@
+{
+  "name": "irc-bridge",
+  "version": "1.0.0",
+  "description": "Gitter IRC bridge",
+  "main": "runner.js",
+  "scripts": {
+    "start": "node runner.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "The Gitter Team",
+  "license": "MIT",
+  "dependencies": {
+    "carrier": "^0.1.14",
+    "eventemitter3": "^0.1.6",
+    "irc-message": "^2.0.1",
+    "node-gitter": "^1.2.6"
+  }
+}
