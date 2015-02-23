@@ -12,9 +12,22 @@ describe('Client', function(){
     assert(client instanceof events.EventEmitter);
   });
 
+  it('should emit PASS command even if not authenticated', function(done) {
+    var socket = new net.Socket();
+    var client = new Client(socket);
+
+    client.on('PASS', function(channels) {
+      done();
+    });
+
+    client.parse('PASS 123token456');
+  });
+
+
   it('should emit after parsing an IRC message', function(done) {
     var socket = new net.Socket();
     var client = new Client(socket);
+    client.authed = true;
 
     client.on('JOIN', function(channels) {
       done();
