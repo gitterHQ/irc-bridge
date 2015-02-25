@@ -1,5 +1,5 @@
 var assert  = require('assert');
-var events  = require('events');
+var EventEmitter = require('eventemitter3');
 var net     = require('net');
 var sinon   = require('sinon');
 
@@ -9,7 +9,7 @@ describe('Client', function(){
   it('should be an event emitter', function() {
     var socket = new net.Socket();
     var client = new Client(socket);
-    assert(client instanceof events.EventEmitter);
+    assert(client instanceof EventEmitter);
   });
 
   it('should emit PASS command even if not authenticated', function(done) {
@@ -27,7 +27,7 @@ describe('Client', function(){
   it('should emit after parsing an IRC message', function(done) {
     var socket = new net.Socket();
     var client = new Client(socket);
-    client.authed = true;
+    client.authenticated = true;
 
     client.on('JOIN', function(channels) {
       done();

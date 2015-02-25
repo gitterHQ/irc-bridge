@@ -2,6 +2,7 @@
   "name": "irc-bridge",
   "version": "1.0.0",
   "description": "Gitter IRC bridge",
+  "repository": "https://github.com/gitterHQ/irc-bridge",
   "main": "runner.js",
   "scripts": {
     "start": "node runner.js",
@@ -11,10 +12,12 @@
   "license": "MIT",
   "dependencies": {
     "carrier": "^0.1.14",
+    "debug": "^2.1.1",
     "eventemitter3": "^0.1.6",
     "irc-message": "^2.0.1",
     "memwatch": "^0.2.2",
-    "node-gitter": "^1.2.6"
+    "node-gitter": "^1.2.6",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "sinon": "^1.12.2"
