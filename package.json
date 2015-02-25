@@ -18,7 +18,7 @@
     "irc-message": "^2.0.1",
     "jade": "^1.9.2",
     "memwatch": "^0.2.2",
-    "node-gitter": "^1.2.6",
+    "node-gitter": "^1.2.7",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
