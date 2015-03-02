@@ -36,21 +36,10 @@ describe('Client', function(){
     client.parse('JOIN #test');
   });
 
-  it('should emit PING when ping', function(done) {
-    var socket = new net.Socket();
-    var client = new Client(socket);
-
-    client.on('PING', function(params) {
-      done();
-    });
-
-    client.ping();
-  });
-
   it('should send valid messages', function(done) {
     var socket = new net.Socket();
     var stub = sinon.stub(socket, 'write', function(msg) {
-      assert(msg === "PING hostname host\r\n")
+      assert(msg === "PING hostname host\r\n");
       done();
     });
 
@@ -64,6 +53,6 @@ describe('Client', function(){
     var client = new Client(socket);
 
     client.on('disconnected', done);
-    client.teardown();
+    client.disconnect();
   });
 });

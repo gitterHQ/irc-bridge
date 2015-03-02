@@ -9,7 +9,7 @@ var Adapter = require('../lib/gitter-adapter.js');
 describe('Gitter Adapter', function(){
   it('should disconect the client on QUIT', function(done) {
     var client = new Client(new net.Socket());
-    var stub = sinon.stub(client, 'teardown', function(msg) {
+    var stub = sinon.stub(client, 'disconnect', function(msg) {
       done();
     });
 
