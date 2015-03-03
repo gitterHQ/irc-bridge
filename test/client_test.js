@@ -55,4 +55,17 @@ describe('Client', function(){
     client.on('disconnected', done);
     client.disconnect();
   });
+
+  it('should process queue after authenticated', function() {
+    var socket = new net.Socket();
+    var client = new Client(socket);
+    var spy = sinon.spy();
+
+    client.parse('PING');
+    client.parse('PING');
+    client.on('PING', spy);
+    client.authenticate({username: 'foo'});
+    sinon.assert.calledTwice(spy);
+  });
+
 });

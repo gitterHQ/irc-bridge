@@ -7,13 +7,28 @@ var Client = require('../lib/client.js');
 var Adapter = require('../lib/gitter-adapter.js');
 
 describe('Gitter Adapter', function(){
-  it('should disconect the client on QUIT', function(done) {
-    var client = new Client(new net.Socket());
-    var stub = sinon.stub(client, 'disconnect', function(msg) {
-      done();
-    });
+  var socket, client, adapter;
 
-    var adapter = new Adapter(client);
-    client.emit('QUIT');
+  beforeEach(function() {
+    socket  = new net.Socket();
+    client  = new Client(socket);
+    adapter = new Adapter(client);
+  });
+
+  it('should disconnect the client on QUIT', function() {
+    client.authenticated = true;
+    var spy = sinon.spy();
+    client.on('disconnected', spy);
+    client.parse('QUIT');
+    sinon.assert.called(spy);
+  });
+
+  it('should ignore NICK and return Gitter nick', function() {
+    client.authenticated = true;
+    client.nick = 'bar'; // obtained after auth
+    var spy = sinon.spy();
+    var stub = sinon.stub(socket, 'write', spy);
+    client.parse('NICK foo');
+    assert(spy.calledWith(":bar!bar@gitter.im NICK :bar\r\n"));
   });
 });
