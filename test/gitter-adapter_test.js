@@ -29,6 +29,6 @@ describe('Gitter Adapter', function(){
     var spy = sinon.spy();
     var stub = sinon.stub(socket, 'write', spy);
     client.parse('NICK foo');
-    assert(spy.calledWith(":bar!bar@gitter.im NICK :bar\r\n"));
+    assert(spy.calledWith(":bar!bar@irc.gitter.im NICK :bar\r\n"));
   });
 });
