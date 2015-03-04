@@ -1,6 +1,9 @@
-h1 Clients connected
+extends layout
 
-ul
-  each client in clients
-    li #{client.uuid} - #{client.nick} | Authenticated: #{client.authenticated}
-  
+block content
+  .container
+    h1 Clients connected
+    
+    ul
+      each client in clients
+        li #{client.uuid} - #{client.nick} | Authenticated: #{client.authenticated}
