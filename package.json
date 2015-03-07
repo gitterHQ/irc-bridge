@@ -4,6 +4,7 @@
   "description": "Gitter IRC bridge",
   "repository": "https://github.com/gitterHQ/irc-bridge",
   "main": "runner.js",
+  "engines": { "node": "0.10.31" },
   "scripts": {
     "start": "node runner.js",
     "test": "mocha"
