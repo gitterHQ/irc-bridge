@@ -2,18 +2,25 @@
 
 Connect to Gitter using the IRC protocol.
 
-## Running the server
-
-You'll need a working Node.js environment.
-
- * Install the dependencies with: `npm install`
- * Start the server with: `npm start`
-
 ## Configuring your client
+
+You can connect to the **official** Gitter IRC bridge at:
+
+ - host: `irc.gitter.im`
+ - port: `6667` (or `6697`)
+
+**SSL is mandatory**
 
 You'll need to provide a valid token to authenticate yourself. You can send your token to the server using the `/PASS` command. If you use a GUI client, this is the Server Password; your client will send it automatically on connection.
 
 You can obtain your token from https://irc.gitter.im
+
+## Running the bridge locally
+
+You'll need a working Node.js environment.
+
+ * Install the dependencies with: `npm install`
+ * Start the server with: `DEBUG=irc* npm start`
 
 ## Contributing
 
