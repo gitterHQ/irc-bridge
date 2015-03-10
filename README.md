@@ -15,6 +15,8 @@ You'll need to provide a valid token to authenticate yourself. You can send your
 
 You can obtain your token from https://irc.gitter.im
 
+You can also find instructions on [how to configure specific clients in the Wiki](https://github.com/gitterHQ/irc-bridge/wiki/Client-configuration)
+
 ## Running the bridge locally
 
 You'll need a working Node.js environment.
