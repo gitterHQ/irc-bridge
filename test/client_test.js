@@ -47,13 +47,14 @@ describe('Client', function(){
     client.send('PING', 'hostname', 'host');
   });
 
-  it('should shutdown properly', function(done) {
+  it('should shutdown properly', function() {
     var socket = new net.Socket();
-    var stub = sinon.stub(socket, 'end');
+    var spy = sinon.spy();
+    var stub = sinon.stub(socket, 'end', spy);
     var client = new Client(socket);
 
-    client.on('disconnected', done);
     client.disconnect();
+    sinon.assert.called(spy);
   });
 
   it('should process queue after authenticated', function() {
@@ -61,9 +62,9 @@ describe('Client', function(){
     var client = new Client(socket);
     var spy = sinon.spy();
 
-    client.parse('PING');
-    client.parse('PING');
-    client.on('PING', spy);
+    client.parse('NICK foo');
+    client.parse('NICK foo');
+    client.on('NICK', spy);
     client.authenticate({username: 'foo'});
     sinon.assert.calledTwice(spy);
   });

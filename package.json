@@ -4,7 +4,9 @@
   "description": "Gitter IRC bridge",
   "repository": "https://github.com/gitterHQ/irc-bridge",
   "main": "runner.js",
-  "engines": { "node": "0.10.31" },
+  "engines": {
+    "node": "0.10.31"
+  },
   "scripts": {
     "start": "node runner.js",
     "test": "mocha"
@@ -18,11 +20,11 @@
     "express": "^4.12.0",
     "irc-message": "^2.0.1",
     "jade": "^1.9.2",
-    "memwatch": "^0.2.2",
     "node-gitter": "^1.2.8",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
+    "mocha": "^2.2.1",
     "sinon": "^1.12.2"
   }
 }
