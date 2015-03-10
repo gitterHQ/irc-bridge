@@ -1,5 +1,7 @@
 # Gitter IRC Bridge
 
+[![Join the chat at https://gitter.im/gitterHQ/irc-bridge](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gitterHQ/irc-bridge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Connect to Gitter using the IRC protocol.
 
 ## Configuring your client
