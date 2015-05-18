@@ -3,8 +3,10 @@ var net     = require('net');
 
 var Server = require('../lib/server.js');
 
-var IRCPORT = 9876;
-var WEBPORT = 5432;
+var rnd = function() { return Math.floor(Math.random() * 900); };
+
+var IRCPORT = 15000 + rnd();
+var WEBPORT = 15000 + rnd();
 
 describe('Server', function(){
   var server;
@@ -22,8 +24,10 @@ describe('Server', function(){
     var client = net.connect({port: IRCPORT});
 
     client.on('connect', function() {
-      assert.equal(1, Object.keys(server.clients).length);
-      client.end();
+      setTimeout(function() {
+        assert.equal(1, Object.keys(server.clients).length);
+        client.end();
+      }, 100);
     });
 
     client.on('data', function() {});
