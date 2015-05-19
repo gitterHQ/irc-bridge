@@ -6,4 +6,5 @@ block content
     
     ul
       each client in clients
-        li #{client.uuid} - #{client.nick} | Authenticated: #{client.authenticated}
+        li
+          a(href="/users/#{client.uuid}") #{client.nick}
