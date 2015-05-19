@@ -23,4 +23,22 @@ describe('Gitter Adapter', function(){
     client.parse('NICK foo');
     assert(spy.calledWith(":bar!bar@irc.gitter.im NICK :bar\r\n"));
   });
+
+  it('should ignore WHO when no parameter is specified', function() {
+    client.authenticated = true;
+    client.nick = 'bar'; // obtained after auth
+    var spy = sinon.spy();
+    var stub = sinon.stub(socket, 'write', spy);
+    client.parse('WHO');
+    assert(spy.calledWith(":bar!bar@irc.gitter.im WHO :\r\n"));
+  });
+
+  it('should ignore WHO when a username is specified', function() {
+    client.authenticated = true;
+    client.nick = 'bar'; // obtained after auth
+    var spy = sinon.spy();
+    var stub = sinon.stub(socket, 'write', spy);
+    client.parse('WHO bar');
+    assert(spy.calledWith(":bar!bar@irc.gitter.im WHO :bar\r\n"));
+  });
 });
