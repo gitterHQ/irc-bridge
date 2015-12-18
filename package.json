@@ -20,7 +20,7 @@
     "express": "^4.12.0",
     "irc-message": "^2.0.1",
     "jade": "^1.9.2",
-    "node-gitter": "^1.2.8",
+    "node-gitter": "^1.2.9",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
