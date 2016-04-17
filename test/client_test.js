@@ -69,4 +69,25 @@ describe('Client', function(){
     sinon.assert.calledTwice(spy);
   });
 
+  it('should split long messages', function(done) {
+    var socket = new net.Socket();
+
+    var prefixes = ':source PRIVMSG target :';
+    var message_index = 0;
+    var messages = [
+      'first message: ' + Array(450).join('a'),
+      'second message ' + Array(100).join('a')
+    ]
+
+    var stub = sinon.stub(socket, 'write', function(msg) {
+      assert.equal(msg, prefixes + messages[message_index++] + "\r\n");
+      if (message_index == 2) {
+        done();
+      }
+    });
+
+    var client = new Client(socket);
+    client.send(':source', 'PRIVMSG', 'target', ':' + messages.join(' '));
+  });
+
 });
