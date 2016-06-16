@@ -5,6 +5,18 @@ var sinon   = require('sinon');
 
 var Client = require('../lib/client.js');
 
+
+// https://tools.ietf.org/html/rfc2812#section-2.3
+var MESSAGE_MAX_LENGTH = 512;
+// 512 - CR - LF
+var MESSAGE_PIECE_MAX_LENGTH = 510;
+
+var stringRepeat = function(str, num) {
+  return Array(num + 1).join(str);
+};
+
+
+
 describe('Client', function(){
   it('should be an event emitter', function() {
     var socket = new net.Socket();
@@ -69,30 +81,81 @@ describe('Client', function(){
     sinon.assert.calledTwice(spy);
   });
 
-  it('should split long messages', function(done) {
+  it('should split long normal messages', function(done) {
     var socket = new net.Socket();
+    var client = new Client(socket);
 
     var prefixes = ':source PRIVMSG target :';
-    var prefix_len = prefixes.length;
-    var message_index = 0;
-    var messages = [
-      // two messages with normal-ish spacing and colons
-      'first message: ' + Array(450).join('a') + ' ',
-      'second message ' + Array(450).join('a') + ' ',
-      // two messages with one long word with no spaces
-      Array(510 - prefix_len + 1).join('a'),
-      Array(510 - prefix_len + 1).join('a')
-    ]
 
-    var stub = sinon.stub(socket, 'write', function(msg) {
-      assert.equal(msg, prefixes + messages[message_index++].trim() + "\r\n");
-      if (message_index == messages.length) {
+    // normal-ish message with spacing and colons
+    var messageFirstPiece = 'first message: ';
+    var repeatedPieceLength = 600;
+    var message = messageFirstPiece + stringRepeat('a', repeatedPieceLength);
+
+    // Exclude the prefixes and the first piece
+    var expectedNumberOfRepeatedPieceCharacters1 = MESSAGE_PIECE_MAX_LENGTH - prefixes.length - messageFirstPiece.length;
+    var expectedIncomingMessage1 = 'first message: ' + stringRepeat('a', expectedNumberOfRepeatedPieceCharacters1);
+    // The overflow from the first message
+    var expectedIncomingMessage2 = stringRepeat('a', repeatedPieceLength - expectedNumberOfRepeatedPieceCharacters1);
+    var expectedIncomingMessages = [
+      expectedIncomingMessage1,
+      expectedIncomingMessage2
+    ];
+
+    var incomingMessageIndex = 0;
+    var stub = sinon.stub(socket, 'write', function(incomingMessage) {
+      assert.equal(incomingMessage, prefixes + expectedIncomingMessages[incomingMessageIndex] + '\r\n');
+      if (incomingMessageIndex === expectedIncomingMessages.length - 1) {
         done();
       }
+
+      incomingMessageIndex++;
     });
 
-    var client = new Client(socket);
-    client.send(':source', 'PRIVMSG', 'target', ':' + messages.join(''));
+    client.send(':source', 'PRIVMSG', 'target', ':' + message);
   });
+
+  it('should split long messages without spaces', function(done) {
+    var socket = new net.Socket();
+    var client = new Client(socket);
+
+    var prefixes = ':source PRIVMSG target :';
+
+    // normal-ish message with spacing and colons
+    var repeatedPieceLength = 600;
+    var message = stringRepeat('a', repeatedPieceLength) + stringRepeat('b', repeatedPieceLength);
+
+    // The first message, ~aaa
+    var expectedNumberOfRepeatedPieceCharacters1 = MESSAGE_PIECE_MAX_LENGTH - prefixes.length;
+    var expectedIncomingMessage1 = stringRepeat('a', expectedNumberOfRepeatedPieceCharacters1);
+
+    // The overflow from the first message, ~aaabbb
+    var expectedNumberOfRepeatedPieceCharacters2 = repeatedPieceLength - expectedNumberOfRepeatedPieceCharacters1;
+    var expectedNumberOfRepeatedPieceCharacters3 = MESSAGE_PIECE_MAX_LENGTH - prefixes.length - expectedNumberOfRepeatedPieceCharacters2;
+    var expectedIncomingMessage2 = stringRepeat('a', expectedNumberOfRepeatedPieceCharacters2) + stringRepeat('b', expectedNumberOfRepeatedPieceCharacters3);
+
+    // The final message, ~bbb
+    var expectedNumberOfRepeatedPieceCharacters4 = repeatedPieceLength - expectedNumberOfRepeatedPieceCharacters3
+    var expectedIncomingMessage3 = stringRepeat('b', expectedNumberOfRepeatedPieceCharacters4);
+
+    var expectedIncomingMessages = [
+      expectedIncomingMessage1,
+      expectedIncomingMessage2,
+      expectedIncomingMessage3
+    ];
+
+    var incomingMessageIndex = 0;
+    var stub = sinon.stub(socket, 'write', function(incomingMessage) {
+      assert.equal(incomingMessage, prefixes + expectedIncomingMessages[incomingMessageIndex] + '\r\n');
+      if (incomingMessageIndex === expectedIncomingMessages.length - 1) {
+        done();
+      }
+
+      incomingMessageIndex++;
+    });
+
+    client.send(':source', 'PRIVMSG', 'target', ':' + message);
+  });
+
 
 });
