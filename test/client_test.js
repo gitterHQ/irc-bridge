@@ -69,4 +69,30 @@ describe('Client', function(){
     sinon.assert.calledTwice(spy);
   });
 
+  it('should split long messages', function(done) {
+    var socket = new net.Socket();
+
+    var prefixes = ':source PRIVMSG target :';
+    var prefix_len = prefixes.length;
+    var message_index = 0;
+    var messages = [
+      // two messages with normal-ish spacing and colons
+      'first message: ' + Array(450).join('a') + ' ',
+      'second message ' + Array(450).join('a') + ' ',
+      // two messages with one long word with no spaces
+      Array(510 - prefix_len + 1).join('a'),
+      Array(510 - prefix_len + 1).join('a')
+    ]
+
+    var stub = sinon.stub(socket, 'write', function(msg) {
+      assert.equal(msg, prefixes + messages[message_index++].trim() + "\r\n");
+      if (message_index == messages.length) {
+        done();
+      }
+    });
+
+    var client = new Client(socket);
+    client.send(':source', 'PRIVMSG', 'target', ':' + messages.join(''));
+  });
+
 });
