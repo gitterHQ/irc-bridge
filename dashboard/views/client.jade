@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .container
+    h1 #{client.nick}
+    h4 Latest events
+    ul
+      each val, key in client.stats
+        li
+          b #{key}
+          |: #{val}
+      

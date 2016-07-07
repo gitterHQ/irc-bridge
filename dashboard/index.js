@@ -10,6 +10,13 @@ app.get('/', function(req,res) {
   res.render('clients', {clients: clients});
 });
 
+app.get('/users/:uuid', function(req,res) {
+  var client = app.irc.clients[req.params.uuid];
+  if (!client) return res.status(404).send('Not Found');
+  res.render('client', {client: client});
+});
+
+
 function hook(ircServer, port) {
   app.irc = ircServer;
   app.listen(port, function(err) {
