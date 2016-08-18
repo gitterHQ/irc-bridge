@@ -14,12 +14,14 @@
   "author": "The Gitter Team",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.4.1",
     "carrier": "^0.1.14",
     "debug": "^2.1.1",
     "eventemitter3": "^0.1.6",
     "express": "^4.12.0",
     "irc-message": "^2.0.1",
     "jade": "^1.9.2",
+    "lru-cache": "^4.0.1",
     "node-gitter": "^2.0.4",
     "uuid": "^2.0.1"
   },
