@@ -1,6 +1,6 @@
 {
   "name": "irc-bridge",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Gitter IRC bridge",
   "repository": "https://github.com/gitterHQ/irc-bridge",
   "main": "runner.js",
