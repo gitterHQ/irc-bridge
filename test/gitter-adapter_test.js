@@ -41,4 +41,22 @@ describe('Gitter Adapter', function(){
     client.parse('WHO bar');
     assert(spy.calledWith(":bar!bar@irc.gitter.im WHO :bar\r\n"));
   });
+
+  it('should preserve the order when sending a batch of messages', function() {
+    var spy = sinon.spy();
+    adapter.sendMessage = spy;
+    adapter.setup("fake-token");
+    adapter.queueMessage("#chan", "first");
+    adapter.queueMessage("#foo", "second");
+    adapter.queueMessage("#bar", "third");
+
+    adapter.sendPromiseChain = adapter.sendPromiseChain.then(function() {
+      assert(spy.calledThrice);
+      assert(spy.firstCall.calledWith("#chan", "first"));
+      assert(spy.secondCall.calledWith("#foo", "second"));
+      assert(spy.thirdCall.calledWith("#bar", "third"));
+    });
+    return adapter.sendPromiseChain;
+  });
+
 });
